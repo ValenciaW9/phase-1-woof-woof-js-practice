@@ -2,6 +2,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
     <title>DOGGO</title>
     <link rel="stylesheet" href="index.css">
     <script type="text/javascript" src="src/index.js"></script>
@@ -9,16 +10,62 @@
   </head>
   <body>
     <div id="filter-div">
-      <button id="good-dog-filter">Filter good dogs: OFF</button>
+      <button id="toggleButton">Filter good dogs: OFF</button>
     </div>
     <div id="dog-bar">
-
+      <img src="dog_image_url" alt="Image of a dog">
+    </div>
+    <div>
+      <h2>Mr. Bonkers</h2>
+      <button>Good Dog!</button>
     </div>
     <div id="dog-summary-container">
       <h1>DOGGO:</h1>
-      <div id="dog-info">
-        
-      </div>
+      <div id="dog-info"></div>
     </div>
+    <script>
+      // Step 1: Update the button's text
+      const toggleButton = document.querySelector('#toggleButton');
+      toggleButton.addEventListener('click', function() {
+        if (toggleButton.textContent === 'Good') {
+          toggleButton.textContent = 'Bad';
+        } else {
+          toggleButton.textContent = 'Good';
+        }
+      });
+
+      // Step 2: Send a PATCH request to update the pup object
+      const updatePup = async (id, isGoodDog) => {
+        try {
+          const response = await fetch(`/pups/${id}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ isGoodDog })
+          });
+          const updatedPup = await response.json();
+          // Step 3: Handle the response
+          // Update the local representation of the pup object
+          console.log(updatedPup);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      // Bonus Step: Filter the displayed pups
+      const filterButton = document.querySelector('#filterButton');
+      filterButton.addEventListener('click', function() {
+        if (filterButton.textContent === 'Filter good dogs: OFF') {
+          filterButton.textContent = 'Filter good dogs: ON';
+          // Filter the displayed pups to show only good dogs
+          console.log('Filter ON');
+        } else {
+          filterButton.textContent = 'Filter good dogs: OFF';
+          // Display all pups
+          console.log('Filter OFF');
+        }
+      });
+    </script>
   </body>
 </html>
